@@ -4,7 +4,6 @@ import os
 import pandas as pd
 from itertools import combinations
 
-# Configuração da página para ocupar a tela toda e ficar com cara de App
 st.set_page_config(page_title="Placar NBA", page_icon="🏀", layout="wide")
 
 jogadores = ["Iago", "Luiz", "Seco", "Big", "Iagu", "Guga"]
@@ -31,7 +30,6 @@ def salvar_dados(estatisticas, confrontos_diretos):
     with open(ARQUIVO_DADOS, "w", encoding="utf-8") as f:
         json.dump(dados, f, indent=4, ensure_ascii=False)
 
-# Carrega os dados na memória ao abrir a página
 estatisticas, confrontos_diretos = carregar_dados()
 
 # --- INTERFACE DO SITE ---
@@ -39,7 +37,6 @@ st.title("🏀 Registro de Partidas NBA")
 
 st.markdown("### Registrar Resultado")
 
-# Cria três colunas para os botões ficarem alinhados
 col1, col2, col3 = st.columns([2, 1, 2])
 
 with col1:
@@ -53,7 +50,6 @@ with col3:
     j2 = st.selectbox("Jogador 2", jogadores)
     vitoria_j2 = st.button("🏆 Venceu", key="v2", use_container_width=True)
 
-# Lógica de registro ao clicar nos botões
 vencedor = None
 perdedor = None
 
