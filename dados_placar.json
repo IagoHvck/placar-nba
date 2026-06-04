@@ -1,18 +1,18 @@
 {
     "estatisticas": {
         "Iago": {
-            "Partidas": 3,
-            "V": 3,
-            "D": 0
+            "Partidas": 8,
+            "V": 6,
+            "D": 2
         },
         "Luiz": {
-            "Partidas": 3,
-            "V": 0,
-            "D": 3
+            "Partidas": 5,
+            "V": 1,
+            "D": 4
         },
         "Seco": {
-            "Partidas": 0,
-            "V": 0,
+            "Partidas": 2,
+            "V": 2,
             "D": 0
         },
         "Big": {
@@ -21,9 +21,9 @@
             "D": 0
         },
         "Iagu": {
-            "Partidas": 0,
-            "V": 0,
-            "D": 0
+            "Partidas": 3,
+            "V": 1,
+            "D": 2
         },
         "Guga": {
             "Partidas": 0,
@@ -33,20 +33,20 @@
     },
     "confrontos_diretos": {
         "Iago vs Luiz": [
-            3,
+            4,
             0
         ],
         "Iago vs Seco": [
             0,
-            0
+            1
         ],
         "Iago vs Big": [
             0,
             0
         ],
         "Iago vs Iagu": [
-            0,
-            0
+            2,
+            1
         ],
         "Iago vs Guga": [
             0,
@@ -54,14 +54,14 @@
         ],
         "Luiz vs Seco": [
             0,
-            0
+            1
         ],
         "Luiz vs Big": [
             0,
             0
         ],
         "Luiz vs Iagu": [
-            0,
+            1,
             0
         ],
         "Luiz vs Guga": [
