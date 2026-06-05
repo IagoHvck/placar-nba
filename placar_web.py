@@ -6,7 +6,7 @@ from itertools import combinations
 
 st.set_page_config(page_title="Placar NBA", page_icon="🏀", layout="wide")
 
-jogadores = ["Iago", "Luiz", "Seco", "Big", "Iagu", "Guga"]
+jogadores = ["Julieta", "Luiz", "Seco", "Big", "Iagu", "Guga"]
 ARQUIVO_DADOS = "dados_placar.json"
 
 # --- FUNÇÕES DE DADOS ---
