@@ -1,13 +1,17 @@
 import streamlit as st
-import json
-import os
 import pandas as pd
 from itertools import combinations
+from streamlit_gsheets import GSheetsConnection
 
 st.set_page_config(page_title="Placar NBA", page_icon="🏀", layout="wide")
 
+# Coloque o link da sua planilha aqui dentro das aspas
+URL_PLANILHA = "https://docs.google.com/spreadsheets/d/1ZtxfeDJGeID6958ffWuFnw71mMJZEIi7GamUldIRpxc/edit?usp=sharing"
+
+# Instancia a conexão com o Google Sheets
+conn = st.connection("gsheets", type=GSheetsConnection)
+
 jogadores = ["Julieta", "Luiz", "Seco", "Big", "Iagu", "Guga"]
-ARQUIVO_DADOS = "dados_placar.json"
 
 # --- FUNÇÕES DE DADOS ---
 def inicializar_dados():
@@ -16,20 +20,43 @@ def inicializar_dados():
     return estatisticas, confrontos
 
 def carregar_dados():
-    if os.path.exists(ARQUIVO_DADOS) and os.path.getsize(ARQUIVO_DADOS) > 0:
-        try:
-            with open(ARQUIVO_DADOS, "r", encoding="utf-8") as f:
-                dados = json.load(f)
-            return dados["estatisticas"], dados["confrontos_diretos"]
-        except:
-            pass
+    try:
+        # O ttl=0 garante que ele sempre puxe o dado fresco da nuvem, sem usar cache antigo
+        df_est = conn.read(spreadsheet=URL_PLANILHA, worksheet="Estatisticas", ttl=0)
+        df_conf = conn.read(spreadsheet=URL_PLANILHA, worksheet="Confrontos", ttl=0)
+        
+        if not df_est.empty and not df_conf.empty:
+            # Reconverte a planilha Geral para o formato do seu dicionário original
+            estatisticas = df_est.set_index("Jogador").to_dict(orient="index")
+            
+            # Reconverte a planilha de Confrontos para o formato do seu dicionário original
+            confrontos_diretos = {}
+            for _, row in df_conf.iterrows():
+                confrontos_diretos[row["Confronto"]] = [row["Vitorias_J1"], row["Vitorias_J2"]]
+                
+            return estatisticas, confrontos_diretos
+    except Exception:
+        # Se a planilha estiver vazia no primeiro acesso, ele inicializa os dados zerados
+        pass
+        
     return inicializar_dados()
 
 def salvar_dados(estatisticas, confrontos_diretos):
-    dados = {"estatisticas": estatisticas, "confrontos_diretos": confrontos_diretos}
-    with open(ARQUIVO_DADOS, "w", encoding="utf-8") as f:
-        json.dump(dados, f, indent=4, ensure_ascii=False)
+    # Transforma os dicionários em tabelas (DataFrames) para salvar no Sheets
+    df_est = pd.DataFrame.from_dict(estatisticas, orient='index').reset_index()
+    df_est.columns = ["Jogador", "Partidas", "V", "D"]
+    
+    dados_conf = [{"Confronto": k, "Vitorias_J1": v[0], "Vitorias_J2": v[1]} for k, v in confrontos_diretos.items()]
+    df_conf = pd.DataFrame(dados_conf)
+    
+    # Sobrescreve as abas da planilha com os dados novos
+    conn.update(spreadsheet=URL_PLANILHA, worksheet="Estatisticas", data=df_est)
+    conn.update(spreadsheet=URL_PLANILHA, worksheet="Confrontos", data=df_conf)
+    
+    # Limpa o cache do sistema para garantir que a próxima leitura seja imediata
+    st.cache_data.clear()
 
+# Carrega os dados na abertura do app
 estatisticas, confrontos_diretos = carregar_dados()
 
 # --- INTERFACE DO SITE ---
