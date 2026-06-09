@@ -106,7 +106,6 @@ if vencedor and perdedor:
             
         salvar_dados(estatisticas, confrontos_diretos)
         st.success(f"✅ Vitória de {vencedor} sobre {perdedor} registrada!")
-        st.rerun() # Atualiza a página instantaneamente para exibir a tabela nova
 
 st.divider()
 

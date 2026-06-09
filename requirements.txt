@@ -1,2 +1,3 @@
-pandaspandas
+streamlit
 st-gsheets-connection
+pandas
